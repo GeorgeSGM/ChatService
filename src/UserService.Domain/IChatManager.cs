@@ -42,26 +42,5 @@ namespace UserService.Domain
         /// <returns>Данные удаленного чата</returns>
         Chat? Delete(long id);
 
-        /// <summary>
-        ///     Добавить сообщение в чат
-        /// </summary>
-        /// <param name="chatId">Идентификатор чата</param>
-        /// <param name="message">Текст сообщения</param>
-        /// <returns>Данные добавленного сообщения</returns>
-        Message AddMessage(long chatId, string message);
-
-        /// <summary>
-        ///     Получить историю сообщений чата
-        /// </summary>
-        /// <param name="chatId">Идентификатор чата</param>
-        /// <returns>Список сообщений чата</returns>
-        List<Message> GetChatHistory(long chatId);
-
-        /// <summary>
-        ///     Получить информацию о чате
-        /// </summary>
-        /// <param name="chatId">Идентификатор чата</param>
-        /// <returns>Информация о чате</returns>
-        Chat GetChatInfo(long chatId);
     }
 }

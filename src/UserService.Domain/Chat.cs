@@ -15,6 +15,6 @@ public class Chat
 
     public bool FlagZakrep { get; set; } = false;
 
-    public List<Message> Messages { get; set; }
+    public List<Message> Messages { get; set; } = new List<Message>();
 
 }

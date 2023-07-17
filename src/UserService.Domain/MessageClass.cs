@@ -16,11 +16,11 @@ namespace ChatService.Domain
         public string Content { get; set; } = "";
 
         public long ChatId { get; set; }
-        public Chat Chat { get; set; }
-
-        public Message(string content)
+        
+        public Message(string content, long chatId)
         {
             Content = content;
+            ChatId = chatId;
         }
     }
 }

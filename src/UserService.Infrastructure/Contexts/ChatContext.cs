@@ -18,9 +18,12 @@ namespace UserService.Infrastructure.Contexts
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Chat>()
-                .HasMany(c => c.Messages)
-                .WithOne(m => m.Chat)
+            modelBuilder.Entity<Message>()
+                .HasKey(m => m.Id);
+
+            modelBuilder.Entity<Message>()
+                .HasOne<Chat>()
+                .WithMany(c => c.Messages)  // Указываем навигационное свойство в классе Chat
                 .HasForeignKey(m => m.ChatId);
 
             base.OnModelCreating(modelBuilder);

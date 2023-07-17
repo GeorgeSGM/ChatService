@@ -1,12 +1,11 @@
 ﻿using ChatService.Domain;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using UserService.Domain;
 using UserService.Infrastructure.Contexts;
 
 namespace UserService.Infrastructure.Managers
 {
-    /// <summary>
-    ///     Реализация интерфейса <see cref="IChatManager"/>
-    /// </summary>
     public class ChatManager : IChatManager
     {
         private readonly ChatContext _context;
@@ -20,7 +19,6 @@ namespace UserService.Infrastructure.Managers
         {
             return _context.Chats.ToList();
         }
-
         public Chat? GetById(long id)
         {
             return _context.Chats.FirstOrDefault(x => x.Id == id);
@@ -44,7 +42,6 @@ namespace UserService.Infrastructure.Managers
             existingChat.Name = chat.Name;
             existingChat.NumberOfUsers = chat.NumberOfUsers;
             existingChat.FlagZakrep = chat.FlagZakrep;
-            existingChat.Messages = chat.Messages;
 
             _context.Update(existingChat);
             _context.SaveChanges();
@@ -64,43 +61,6 @@ namespace UserService.Infrastructure.Managers
             return entry.Entity;
         }
 
-        public Message AddMessage(long chatId, string message)
-        {
-            var chat = _context.Chats.FirstOrDefault(x => x.Id == chatId);
-            if (chat is null)
-            {
-                throw new ArgumentException($"Chat with id {chatId} not found");
-            }
-
-            var newMessage = new Message(message);
-            newMessage.ChatId = chat.Id;
-            chat.Messages.Add(newMessage);
-
-            _context.SaveChanges();
-
-            return newMessage;
-        }
-
-        public List<Message> GetChatHistory(long chatId)
-        {
-            var chat = _context.Chats.FirstOrDefault(x => x.Id == chatId);
-            if (chat is null)
-            {
-                throw new ArgumentException($"Chat with id {chatId} not found");
-            }
-
-            return chat.Messages;
-        }
-
-        public Chat GetChatInfo(long chatId)
-        {
-            var chat = _context.Chats.FirstOrDefault(x => x.Id == chatId);
-            if (chat is null)
-            {
-                throw new ArgumentException($"Chat with id {chatId} not found");
-            }
-
-            return chat;
-        }
+        
     }
 }

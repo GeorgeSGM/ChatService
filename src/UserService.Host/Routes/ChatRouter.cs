@@ -1,5 +1,5 @@
-﻿using UserService.Domain;
-using UserService.Infrastructure.Managers;
+﻿using ChatService.Domain;
+using UserService.Domain;
 
 namespace UserService.Host.Routes
 {
@@ -19,13 +19,10 @@ namespace UserService.Host.Routes
             var chatGroup = application.MapGroup("/api/chats");
 
             chatGroup.MapGet(pattern: "/", handler: GetAllChats);
-            chatGroup.MapGet(pattern: "/{id:long}", handler: GetChatById);
+            chatGroup.MapGet(pattern: "/{id:long}", handler: GetChatByChatId);
             chatGroup.MapPost(pattern: "/", handler: CreateChat);
             chatGroup.MapPut(pattern: "/", handler: UpdateChat);
             chatGroup.MapDelete(pattern: "/{id:long}", handler: DeleteChat);
-            chatGroup.MapPost(pattern: "/{chatId:long}/messages", handler: AddMessage);
-            chatGroup.MapGet(pattern: "/{chatId:long}/messages", handler: GetChatHistory);
-            chatGroup.MapGet(pattern: "/{chatId:long}", handler: GetChatInfo);
 
             return application;
         }
@@ -36,7 +33,7 @@ namespace UserService.Host.Routes
             return Results.Ok(chats);
         }
 
-        private static IResult GetChatById(long id, IChatManager chatManager)
+        private static IResult GetChatByChatId(long id, IChatManager chatManager)
         {
             var chat = chatManager.GetById(id);
             return chat is null ? Results.NotFound() : Results.Ok(chat);
@@ -44,6 +41,7 @@ namespace UserService.Host.Routes
 
         private static IResult CreateChat(Chat chat, IChatManager chatManager)
         {
+            chat.Messages = null;
             var createdChat = chatManager.Create(chat);
             return Results.Ok(createdChat);
         }
@@ -60,22 +58,8 @@ namespace UserService.Host.Routes
             return deletedChat is null ? Results.NotFound() : Results.Ok(deletedChat);
         }
 
-        private static IResult AddMessage(long chatId, string message, IChatManager chatManager)
-        {
-            var newMessage = chatManager.AddMessage(chatId, message);
-            return Results.Ok(newMessage);
-        }
+        
 
-        private static IResult GetChatHistory(long chatId, IChatManager chatManager)
-        {
-            var chatHistory = chatManager.GetChatHistory(chatId);
-            return Results.Ok(chatHistory);
-        }
-
-        private static IResult GetChatInfo(long chatId, IChatManager chatManager)
-        {
-            var chat = chatManager.GetChatInfo(chatId);
-            return chat is null ? Results.NotFound() : Results.Ok(chat);
-        }
+        
     }
 }
